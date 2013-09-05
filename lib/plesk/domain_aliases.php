@@ -19,11 +19,14 @@ EOT;
 	protected function process_response($xml)
 	{
 		$temp = array();
-		for($i=0; $i<count($xml->domain_alias->get->result); $i++)
-		{
-			$node = $xml->domain_alias->get->result[$i];
-			$temp[(int)$node->id] = (string)$node->info->name;
+		for($i=0; $i<count($xml->domain_alias->get->result); $i++){
+			if( empty( $xml->domain_alias->get->result[$i]->info ) ){
+				continue;
+			}else{
+				$node = $xml->domain_alias->get->result[$i];
+				$temp[(int)$node->id] = (string)$node->info->name;
+			}
 		}
-		return $temp;
+		return array_unique($temp);
 	}
 }
